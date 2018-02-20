@@ -1,11 +1,12 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-from league.models import Season, Nine, Hole
+from league.models import Season, Nine, Hole, Division
 
 
 class Week(models.Model):
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
+    division = models.ForeignKey(Division, on_delete=models.CASCADE)
     nine = models.ForeignKey(Nine, on_delete=models.CASCADE)
     date = models.DateField()
     number = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(99)])
@@ -14,9 +15,15 @@ class Week(models.Model):
         unique_together = ('season', 'number')
 
 
-class Team(models.Model):
+class TeamHeader(models.Model):
     name = models.CharField(max_length=50)
+    alternate_id = models.IntegerField(null=True, blank=True)
+
+
+class Team(models.Model):
+    header = models.ForeignKey(TeamHeader, on_delete=models.CASCADE)
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
+    division = models.ForeignKey(Division, on_delete=models.CASCADE)
     points_ind = models.BooleanField()
     best_ball_ind = models.BooleanField()
     alternate_id = models.IntegerField(null=True, blank=True)
