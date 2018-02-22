@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-from league.models import Season, Nine, Hole, Division
+from league.models import Season, Nine, Hole, Division, League
 
 
 class Week(models.Model):
@@ -12,21 +12,35 @@ class Week(models.Model):
     number = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(99)])
 
     class Meta:
-        unique_together = ('season', 'number')
+        unique_together = ('season', 'division', 'number')
+
+    def __str__(self):
+        return str(self.id) + ' - ' + self.division.league.name + \
+               ' - Week: ' + str(self.number) + ' - ' + str(self.date)
 
 
 class TeamHeader(models.Model):
     name = models.CharField(max_length=50)
-    alternate_id = models.IntegerField(null=True, blank=True)
+    league = models.ForeignKey(League, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Team Headers'
+
+    def __str__(self):
+        return str(self.id) + ' - ' + self.name + ' (' + self.league.name + ')'
 
 
 class Team(models.Model):
+    name = models.CharField(max_length=50)
     header = models.ForeignKey(TeamHeader, on_delete=models.CASCADE)
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
     division = models.ForeignKey(Division, on_delete=models.CASCADE)
-    points_ind = models.BooleanField()
-    best_ball_ind = models.BooleanField()
+    points_ind = models.BooleanField(default=True)
+    best_ball_ind = models.BooleanField(default=True)
     alternate_id = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.id) + ' - ' + self.name + ' (' + str(self.season.year) + ' ' + self.division.name + ')'
 
 
 class TeamScore(models.Model):
@@ -45,8 +59,13 @@ class Match(models.Model):
     starting_hole = models.ForeignKey(Hole, on_delete=models.CASCADE)
 
     class Meta:
+        verbose_name_plural = 'Matches'
         unique_together = (('week', 'first_team'), ('week', 'second_team'))
 # TODO:  make sure first team cannot equal second team
+
+    def __str__(self):
+        return str(self.id) + ' - ' + self.week.season.league.name + ' - Week: ' + \
+               str(self.week.number) + ' - ' + self.first_team.name + ' vs. ' + self.second_team.name
 
 
 class MatchPoints(models.Model):

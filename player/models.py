@@ -8,9 +8,12 @@ from match.models import Week, Team
 class Person(models.Model):
     last_name = models.CharField(max_length=50)
     first_name = models.CharField(max_length=50)
-    phone = models.CharField(max_length=50)
+    phone = models.CharField(max_length=50, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
     alternate_id = models.PositiveIntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.id) + ' - ' + self.first_name + ' ' + self.last_name + ' (Alt: ' + str(self.alternate_id) + ')'
 
 
 class Player(models.Model):
@@ -19,6 +22,10 @@ class Player(models.Model):
 
     class Meta:
         unique_together = ('person', 'league')
+
+    def __str__(self):
+        return str(self.id) + ' - ' + self.person.first_name + ' ' + self.person.last_name + \
+               ' (Alt: ' + str(self.person.alternate_id) + ') - ' + self.league.name
 
 
 class PlayerHandicap(models.Model):
@@ -29,6 +36,20 @@ class PlayerHandicap(models.Model):
 
     class Meta:
         unique_together = ('player', 'week')
+
+
+class TeamPlayers(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    captain = models.BooleanField(default=False)
+# TODO:  make sure the given player is in the league
+
+    class Meta:
+        verbose_name_plural = 'Team Players'
+
+    def __str__(self):
+        return str(self.id) + ' - ' + self.team.name + ' - ' + \
+               self.player.person.first_name + ' ' + self.player.person.last_name
 
 
 class PlayerRound(models.Model):

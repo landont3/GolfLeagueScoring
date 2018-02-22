@@ -8,6 +8,7 @@ HANDICAP_METHODS = (
     (3, 'Other')
 )
 
+
 class League(models.Model):
     name = models.CharField(max_length=50)
 
