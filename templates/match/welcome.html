@@ -1,10 +1,15 @@
+
 {% extends 'base.html' %}
 
 {% block content %}
 
-    this is a shitty welcome page for the entire site.
+    this is a shitty welcome page for the match entry.
+    <p><a href="{% url 'welcome' %}">Site Home Page</a></p>
     <p><a href="{% url 'league_home' %}">League Home Page</a></p>
-    <p><a href="{% url 'match_home' %}">Match Home Page</a></p>
     <p><a href="{% url 'player_home' %}">Player Home Page</a></p>
+    <p><a href="{% url 'week_list' %}">Enter Match Scores</a></p>
+
+
+
 
 {% endblock %}

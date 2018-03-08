@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from .models import PlayerRound
 
 
-class RoundInput(ModelForm):
+class PlayerRoundForm(ModelForm):
     class Meta:
         model = PlayerRound
-        exclude = ('id',)
+        exclude = []

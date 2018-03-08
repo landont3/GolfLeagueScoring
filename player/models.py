@@ -15,6 +15,9 @@ class Person(models.Model):
     def __str__(self):
         return str(self.id) + ' - ' + self.first_name + ' ' + self.last_name + ' (Alt: ' + str(self.alternate_id) + ')'
 
+    def fullname(self):
+        return self.last_name + ', ' + self.first_name
+
 
 class Player(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
@@ -24,8 +27,8 @@ class Player(models.Model):
         unique_together = ('person', 'league')
 
     def __str__(self):
-        return str(self.id) + ' - ' + self.person.first_name + ' ' + self.person.last_name + \
-               ' (Alt: ' + str(self.person.alternate_id) + ') - ' + self.league.name
+        return self.person.last_name + ', ' + self.person.first_name + ' (ID: ' + str(self.id) + \
+               ') (Alt: ' + str(self.person.alternate_id) + ') - ' + self.league.name
 
 
 class PlayerHandicap(models.Model):
@@ -56,15 +59,25 @@ class PlayerRound(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     week = models.ForeignKey(Week, on_delete=models.CASCADE)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    score1 = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)])
+    score2 = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)])
+    score3 = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)])
+    score4 = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)])
+    score5 = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)])
+    score6 = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)])
+    score7 = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)])
+    score8 = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)])
+    score9 = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)])
 
     class Meta:
         unique_together = ('player', 'week')
 
-
-class PlayerScores(models.Model):
-    round = models.ForeignKey(PlayerRound, on_delete=models.CASCADE)
-    hole = models.ForeignKey(Hole, on_delete=models.CASCADE)
-    score = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(99)])
-
-    class Meta:
-        unique_together = ('round', 'hole')
+# DEPRACATED TO ALLOW FORMS TO WORK EASIER
+# -----
+# class PlayerScores(models.Model):
+#     round = models.ForeignKey(PlayerRound, on_delete=models.CASCADE)
+#     hole = models.ForeignKey(Hole, on_delete=models.CASCADE)
+#     score = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(99)])
+#
+#     class Meta:
+#         unique_together = ('round', 'hole')

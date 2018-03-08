@@ -1,0 +1,18 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h3>{{ week.season.league.name }} | Week:  {{ week.number }} | {{ week.date }}</h3>
+    <b><strong>{{ message }}</strong></b>
+        <div class="col-md-8">
+            <ul>
+                {% for match in matches %}
+                    <li>{{ match.first_team.name }} vs. {{ match.second_team.name }} - <a
+                            href="{% url 'match_edit' match.id%}">edit</a> | <a
+                            href="">view</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    <p><a href="{% url 'week_list' %}">Back to Week List</a></p>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <b><strong>{{ message }}</strong></b>
+
+        <div class="col-md-4">
+            <ul>
+                {% for player_round in player_rounds %}
+                    <li>{{ player_round.player.person.fullname }} | {{ player_round.team.name }} - (<a href="{% url 'score_edit' player_round.id %}">edit</a>)</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+{% endblock %}

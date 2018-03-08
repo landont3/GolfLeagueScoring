@@ -1,5 +1,14 @@
-penis<br>
-penis<br>
-penis
-<p>
-wayners
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <b><strong>{{ message }}</strong></b>
+        <div class="col-md-4">
+            <form method="post" action="{% url 'enter_scores' %}">
+                {{ form | crispy }}
+                {% csrf_token %}
+                <button type="submit">Enter Scores</button>
+            </form>
+        </div>
+
+{% endblock %}

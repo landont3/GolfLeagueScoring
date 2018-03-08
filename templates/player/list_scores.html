@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <b><strong>{{ message }}</strong></b>
+
+        <div class="col-md-4">
+            <ul>
+                {% for week in weeks %}
+                    <li>{{ week.date }} | {{ week.number }} - (<a href="{% url 'edit_scores' week.id %}">view</a>)</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+{% endblock %}
